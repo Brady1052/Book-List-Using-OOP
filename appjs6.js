@@ -58,33 +58,48 @@ class UI {
 
 //Local Storage Class
 class Store {
- static getBooks(){
-  let books;
-  if(localStorage.getItem('books') === null){
-       books = [];
-  } else{
-    books = JSON.parse(localStorage.getItem('books'))
-  }
-  return books;
- }  
+    static getBooks() {
+        let books;
+        if (localStorage.getItem('books') === null) {
+            books = [];
+        } else {
+            books = JSON.parse(localStorage.getItem('books'))
+        }
+        return books;
+    }
 
- static displayBooks(){
+    static displayBooks() {
+        const books = Store.getBooks();
 
- }
+        books.forEach(function (book) {
+            const ui = new UI;
 
- static addBook(book){
-  const books = Store.getBooks();
+            //Add book to UI
+            ui.addBookToList(book);
+        });
+    }
 
-  books.push(book);
+    static addBook(book) {
+        const books = Store.getBooks();
 
-  localStorage.setItem('books', JSON.stringify(books));
- }
+        books.push(book);
 
- static removeBook(){
+        localStorage.setItem('books', JSON.stringify(books));
+    }
 
- }
+    static removeBook(isbn) {
+        const books = Store.getBooks();
+
+        books.forEach(function (book, index) {
+            if (book.isbn === isbn) {
+                books.splice(index, 1);
+            }
+        });
+        localStorage.setItem('books', JSON.stringify(books));
+    }
 };
-
+//Dom load Event
+document.addEventListener('DOMContentLoaded', Store.displayBooks);
 //Event Listener for Adding a Book
 document.getElementById('book-form').addEventListener('submit', function (e) {
     //Get Form Values
@@ -125,6 +140,9 @@ document.getElementById('book-list').addEventListener
         const ui = new UI();
 
         ui.deleteBook(e.target);
+
+        //Remove from  LS
+        Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
 
         //Show Message
         ui.showAlert('Book Removed', 'success');
