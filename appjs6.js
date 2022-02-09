@@ -1,32 +1,28 @@
-// Book Construtor
-function Book(title, author, isbn) {
+class Book {
+constructor(title, author, isbn){
     this.title = title;
     this.author = author;
     this.isbn = isbn;
 }
+}
 
-//UI Constructor
-function UI() {};
+class UI {
+addBookToList(book){
+    const list = document.getElementById('book-list');
+    //Create tr Element
+    const row = document.createElement('tr');
+    // Insert Cols
+    row.innerHTML =`
+    <td>${book.title}</td>
+    <td>${book.author}</td>
+    <td>${book.isbn}</td>
+    <td><a href="#" class="delete">X<a></td>
+    `;
+    
+    list.appendChild(row);
+}
 
-//Add book to list
-UI.prototype.addBookToList = function(book){
-const list = document.getElementById('book-list');
-//Create tr Element
-const row = document.createElement('tr');
-// Insert Cols
-row.innerHTML =`
-<td>${book.title}</td>
-<td>${book.author}</td>
-<td>${book.isbn}</td>
-<td><a href="#" class="delete">X<a></td>
-`;
-
-list.appendChild(row);
-};
-
-//Show Alert
-
-UI.prototype.showAlert = function(message, className){
+showAlert(message, className){
 //Create Div
 const div = document.createElement('div');
 //Add Classes
@@ -45,23 +41,20 @@ container.insertBefore(div, form)
 setTimeout(function (){
     document.querySelector('.alert').remove()
 }, 3000);
-
 }
 
-//Delete Book
-
-UI.prototype.deleteBook= function(target){
+deleteBook(target){
     if(target.className === 'delete'){
-target.parentElement.parentElement.remove();
-    }
+        target.parentElement.parentElement.remove();
+            }
 }
 
-//Clear Fields
-UI.prototype.clearFields = function(){
+clearFields(){
     document.getElementById('title').value = '';
     document.getElementById('author').value = '';
     document.getElementById('isbn').value = '';
-};
+}
+}
 
 //Event Listeners
 document.getElementById('book-form').addEventListener('submit', function (e) {
@@ -74,6 +67,8 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
     
     //Instantiate UI
     const ui = new UI();
+
+    console.log(ui)
 
     //Validate
     if(title === '' || author === '' || isbn === ''){
@@ -107,5 +102,6 @@ document.getElementById('book-list').addEventListener
 
     e.preventDefault();
 })
+
     
     
